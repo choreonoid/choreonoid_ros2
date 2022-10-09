@@ -42,6 +42,7 @@ BodyROS2Item::BodyROS2Item()
 {
     node_ = std::make_shared<rclcpp::Node>("choreonoid_body_ros2",
                                            rclcpp::NodeOptions());
+    image_transport = std::make_shared<image_transport::ImageTransport>(node_);
     std::cout << "constructing BodyROS2Item class..." << std::endl;
     io = nullptr;
     jointStateUpdateRate = 100.0;
@@ -54,6 +55,7 @@ BodyROS2Item::BodyROS2Item(const BodyROS2Item &org)
 {
     node_ = std::make_shared<rclcpp::Node>("choreonoid_body_ros2",
                                            rclcpp::NodeOptions());
+    image_transport = std::make_shared<image_transport::ImageTransport>(node_);
     std::cout << "constructing BodyROS2Item class..." << std::endl;
     io = nullptr;
     jointStateUpdateRate = 100.0;
@@ -263,15 +265,9 @@ void BodyROS2Item::createSensors(BodyPtr body)
         std::string name = sensor->name();
         std::replace(name.begin(), name.end(), '-', '_');
 
-        //    auto raw_publisher = image_transport::create_publisher(node_.get(),
-        //    name + "/image_raw"); std::shared_ptr<image_transport::Publisher>
-        //    publisher(
-        //        &raw_publisher, [](image_transport::Publisher *) {});
-
-        auto publisher = node_->create_publisher<sensor_msgs::msg::Image>(
-            name + "/image_raw", 1);
-        visionSensorPublishers.push_back(publisher);
-        sensor->sigStateChanged().connect([this, sensor, publisher]() {
+        visionSensorPublishers.push_back(image_transport->advertise(name, 1));
+        auto & publisher = visionSensorPublishers.back();
+        sensor->sigStateChanged().connect([this, sensor, &publisher]() {
             updateVisionSensor(sensor, publisher);
         });
         SetBoolCallback requestCallback = std::bind(&BodyROS2Item::switchDevice,
@@ -454,7 +450,7 @@ void BodyROS2Item::updateAccelSensor(
 
 void BodyROS2Item::updateVisionSensor(
     Camera *sensor,
-    rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher)
+    image_transport::Publisher & publisher)
 {
     if (!sensor->on()) {
         return;
@@ -483,7 +479,7 @@ void BodyROS2Item::updateVisionSensor(
     // TODO
     sensor_msgs::msg::CameraInfo camera_info;
     std::cout << "publish image sensor" << std::endl;
-    publisher->publish(vision);
+    publisher.publish(vision);
 }
 
 
