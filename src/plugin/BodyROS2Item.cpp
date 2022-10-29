@@ -31,7 +31,6 @@ using std::placeholders::_2;
 
 void BodyROS2Item::initializeClass(ExtensionManager *ext)
 {
-    std::cout << "initialize BodyROS2Item" << std::endl;
     ext->itemManager().registerClass<BodyROS2Item>(N_("BodyROS2Item"));
     ext->itemManager().addCreationPanel<BodyROS2Item>();
 }
@@ -43,7 +42,6 @@ BodyROS2Item::BodyROS2Item()
     node_ = std::make_shared<rclcpp::Node>("choreonoid_body_ros2",
                                            rclcpp::NodeOptions());
     image_transport = std::make_shared<image_transport::ImageTransport>(node_);
-    std::cout << "constructing BodyROS2Item class..." << std::endl;
     io = nullptr;
     jointStateUpdateRate = 100.0;
 }
@@ -56,7 +54,6 @@ BodyROS2Item::BodyROS2Item(const BodyROS2Item &org)
     node_ = std::make_shared<rclcpp::Node>("choreonoid_body_ros2",
                                            rclcpp::NodeOptions());
     image_transport = std::make_shared<image_transport::ImageTransport>(node_);
-    std::cout << "constructing BodyROS2Item class..." << std::endl;
     io = nullptr;
     jointStateUpdateRate = 100.0;
 }
@@ -100,7 +97,6 @@ void BodyROS2Item::doPutProperties(PutPropertyFunction &putProperty)
 
 bool BodyROS2Item::initialize(ControllerIO *io)
 {
-    std::cout << "initialize BodyROS2Item" << std::endl;
     if (!io->body()) {
         MessageView::instance()
             ->putln(format(_("BodyROS2Item \"{0}\" is invalid because it is "
@@ -278,7 +274,6 @@ void BodyROS2Item::createSensors(BodyPtr body)
         visionSensorSwitchServers.push_back(
             node_->create_service<std_srvs::srv::SetBool>(name + "/set_enabled",
                                                           requestCallback));
-        std::cout << visionSensorPublishers.size() << std::endl;
         RCLCPP_INFO(node_->get_logger(),
                     "Create RGB camera %s (%f Hz)",
                     sensor->name().c_str(),
@@ -455,7 +450,7 @@ void BodyROS2Item::updateVisionSensor(
     if (!sensor->on()) {
         return;
     }
-    std::cout << "updateVisionSensor" << std::endl;
+
     sensor_msgs::msg::Image vision;
     vision.header.stamp = getStampMsgFromSec(io->currentTime());
     vision.header.frame_id = sensor->name();
@@ -476,9 +471,6 @@ void BodyROS2Item::updateVisionSensor(
     std::memcpy(&(vision.data[0]),
                 &(sensor->image().pixels()[0]),
                 vision.step * vision.height);
-    // TODO
-    sensor_msgs::msg::CameraInfo camera_info;
-    std::cout << "publish image sensor" << std::endl;
     publisher.publish(vision);
 }
 
@@ -635,47 +627,11 @@ void BodyROS2Item::input() {}
 
 void BodyROS2Item::output() {}
 
-// void BodyROS2Item::stop_publish()
-//{
-//     size_t i;
-//
-//     for (i = 0; i < forceSensorPublishers.size(); i++) {
-//         forceSensorPublishers[i].shutdown();
-//     }
-//
-//     for (i = 0; i < rateGyroSensorPublishers.size(); i++) {
-//         rateGyroSensorPublishers[i].shutdown();
-//     }
-//
-//     for (i = 0; i < accelSensorPublishers.size(); i++) {
-//         accelSensorPublishers[i].shutdown();
-//     }
-//
-//     for (i = 0; i < visionSensorPublishers.size(); i++) {
-//         visionSensorPublishers[i].shutdown();
-//     }
-//
-//     for (i = 0; i < rangeVisionSensorPublishers.size(); i++) {
-//         rangeVisionSensorPublishers[i].shutdown();
-//     }
-//
-//     for (i = 0; i < rangeSensorPublishers.size(); i++) {
-//         rangeSensorPublishers[i].shutdown();
-//     }
-//
-//     for (i = 0; i < rangeSensorPcPublishers.size(); i++) {
-//         rangeSensorPcPublishers[i].shutdown();
-//     }
-//
-//     return;
-// }
-
 void BodyROS2Item::switchDevice(
     std_srvs::srv::SetBool::Request::ConstSharedPtr request,
     std_srvs::srv::SetBool::Response::SharedPtr response,
     Device *sensor)
 {
-    std::cout << "switchDevice : " << sensor->name() << std::endl;
     sensor->on(request->data);
     response->success = (request->data == sensor->on());
 }
@@ -683,7 +639,6 @@ void BodyROS2Item::switchDevice(
 void BodyROS2Item::stop()
 {
     if (rclcpp::ok()) {
-        //stopPublishing();
         rclcpp::shutdown();
     }
     return;
