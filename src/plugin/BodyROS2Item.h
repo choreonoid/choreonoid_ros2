@@ -163,12 +163,6 @@ private:
                       std_srvs::srv::SetBool::Response::SharedPtr response,
                       Device *sensor);
     builtin_interfaces::msg::Time getStampMsgFromSec(double sec);
-
-    /**
-    @brief Stop publish.
-    This method call from BodyROS2Item::stop.
-   */
-    //    void stop_publish();
 };
 
 typedef ref_ptr<BodyROS2Item> BodyROS2ItemPtr;

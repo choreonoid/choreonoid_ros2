@@ -4,7 +4,6 @@
 #include <cnoid/Link>
 #include <cnoid/MessageView>
 #include <cnoid/PutPropertyFunction>
-//#include <cnoid/Sensor>
 
 #include <geometry_msgs/msg/point32.hpp>
 #include <geometry_msgs/msg/wrench_stamped.hpp>
