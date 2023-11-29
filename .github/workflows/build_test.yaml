@@ -7,17 +7,17 @@ on:
 jobs:
   build:
     name: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     timeout-minutes: 120
     strategy:
       fail-fast: false
     env:
-      ROS_DISTRO: foxy
+      ROS_DISTRO: humble
     container:
-      image: rostooling/setup-ros-docker:ubuntu-focal-ros-foxy-ros-base-latest
+      image: rostooling/setup-ros-docker:ubuntu-jammy-ros-humble-ros-base-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
