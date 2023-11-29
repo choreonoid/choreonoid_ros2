@@ -30,7 +30,6 @@ jobs:
           libboost-system-dev \
           libboost-program-options-dev \
           libboost-iostreams-dev \
-          libboost-filesystem-dev \
           libeigen3-dev \
           uuid-dev \
           libxfixes-dev \
@@ -40,7 +39,8 @@ jobs:
           zlib1g-dev \
           libjpeg-dev \
           libpng-dev \
-          qt5-default \
+          libfreetype-dev \
+          qtbase5-dev \
           libqt5x11extras5-dev \
           libqt5svg5-dev \
           qttranslations5-l10n \
