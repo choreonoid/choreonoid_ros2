@@ -23,6 +23,8 @@ jobs:
 
       - name: Install dependencies of choreonoid
         run: |
+          apt-get update && \
+          apt-get -y upgrade && \
           apt-get -y install \
           build-essential \
           cmake-curses-gui \
