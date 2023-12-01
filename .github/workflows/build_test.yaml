@@ -54,7 +54,8 @@ jobs:
           libpulse-dev \
           libsndfile1-dev \
           libgstreamer1.0-dev \
-          libgstreamer-plugins-base1.0-dev
+          libgstreamer-plugins-base1.0-dev \
+          libzip-dev
 
       - name: Run build test
         uses: ros-tooling/action-ros-ci@v0.3
