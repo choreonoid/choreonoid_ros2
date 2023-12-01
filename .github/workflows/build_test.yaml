@@ -55,7 +55,9 @@ jobs:
           libsndfile1-dev \
           libgstreamer1.0-dev \
           libgstreamer-plugins-base1.0-dev \
-          libzip-dev
+          libzip-dev \
+          python3-colcon-coveragepy-result \
+          python3-colcon-lcov-result
 
       - name: Run build test
         uses: ros-tooling/action-ros-ci@v0.3
@@ -63,6 +65,5 @@ jobs:
           target-ros2-distro: humble
           vcs-repo-file-url: dependency.repos
           extra-cmake-args: -DWITH_INTEGRATION_TEST=ON
-          skip-test: 'true'
           # If possible, pin the repository in the workflow to a specific commit to avoid
           # changes in colcon-mixin-repository from breaking your tests.
