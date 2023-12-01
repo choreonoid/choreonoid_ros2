@@ -48,13 +48,6 @@ int main(int argc, char** argv)
 
     app.requirePluginToCustomizeApplication("ROS2");
 
-    ROS2Plugin* ros2Plugin = static_cast<ROS2Plugin*>(plugin_manager->findPlugin("ROS2"));
-
-    rclcpp::executors::MultiThreadedExecutor executor;
-    std::shared_ptr<rclcpp::Node> node;
-    node.reset(ros2Plugin);
-    executor.add_node(node);
-
     int ret = app.exec();
 
     rclcpp::shutdown();
