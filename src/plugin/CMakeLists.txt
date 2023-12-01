@@ -10,7 +10,15 @@ choreonoid_add_plugin(${target}
         ${mofiles}
   )
 
-target_link_libraries(${target}
+target_include_directories(${target} PRIVATE
+  ${rclcpp_INCLUDE_DIRS}
+  ${std_msgs_INCLUDE_DIRS}
+  ${std_srvs_INCLUDE_DIRS}
+  ${sensor_msgs_INCLUDE_DIRS}
+  ${image_transport_INCLUDE_DIRS}
+  )
+
+target_link_libraries(${target} PRIVATE
   ${rclcpp_LIBRARIES}
   ${std_msgs_LIBRARIES}
   ${std_srvs_LIBRARIES}
